@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 import orm
 from coroweb import add_routes,add_static
 
-def init_jinjia2(app,**kw):
+def init_jinja2(app,**kw):
     logging.info('init jinja2...')
     options=dict(
         autoescape=kw.get('autoescape',True),
@@ -17,7 +17,7 @@ def init_jinjia2(app,**kw):
         block_end_string=kw.get('block_end_string','%}'),
         variable_start_string=kw.get('variable_start_string','{{'),
         variable_end_string=kw.get('variable_end_string','}}'),
-        auto_load=kw.get('auto_reload',True)
+        auto_reload=kw.get('auto_reload',True)
     )
     path=kw.get('path',None)
     if path is None:
@@ -25,7 +25,7 @@ def init_jinjia2(app,**kw):
     logging.info('set jinja2 template path:%s' % path)
     env=Environment(loader=FileSystemLoader(path),**options)
     filters=kw.get('filters',None)
-    if filters is no None:
+    if filters is not None:
         for name,f in filters.items():
             env.filters[name]=f
     app['__templating__']=env
@@ -99,7 +99,7 @@ def datetime_filter(t):
     return u'%s-%s-%s-'%(dt.year,dt.month,dy.day)
 
 async def init(loop):
-    await orm.create_pool(loop=loop,host='127.0.0.1',port =3306,use='www-data',password='www-data',db='awesome')
+    await orm.create_pool(loop=loop,host='127.0.0.1',port =3306,user='www-data',password='www-data',db='awesome')
     app=web.Application(loop=loop,middlewares=[
         logger_factory,response_factory
         ])
