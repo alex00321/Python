@@ -92,7 +92,7 @@ class RequestHandler(object):
                 ct=request.content_type.lower()
                 if ct.startswith('application/json'):
                     params =await request.json()
-                    if not isinstance(param,dict):
+                    if not isinstance(params,dict):
                         return web.HTTPBadRequest('JSON body must be object.')
                     kw=params
                 elif ct.startswith('application/x-www-form-urlencoded') or ct.startswith('multipart/form-data'):
@@ -112,7 +112,7 @@ class RequestHandler(object):
             if not self._has_var_kw_arg and self._named_kw_args:
                 #remove all unnamed kw:
                 copy = dict()
-                for name in self._name_kw_args:
+                for name in self._named_kw_args:
                     if name in kw:
                         copy[name]=kw[name]
                 kw=copy
@@ -126,7 +126,7 @@ class RequestHandler(object):
         #check required kw:
         if self._required_kw_args:
             for name in self._required_kw_args:
-                if not nama in kw:
+                if not name in kw:
                     return web.HTTPBadRequest('Missing argument: %s'% name)
         logging.info('call with args: %s' % str(kw))
         try:
