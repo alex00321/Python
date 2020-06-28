@@ -71,29 +71,6 @@ def auto_download(image_url,file_name,retry_time):
         retry_time-=1
         auto_download(image_url,file_name,retry_time)
 
-def download_pic(img_lists,dir_name):
-    print("一共有{num}张照片".format(num=len(img_lists)))
-    for image_url in img_lists:
-        response=requests.get(image_url,stream=True)
-        if response.status_code==200:
-            image=response.content
-        else:
-            continue
-
-        file_name=dir_name+os.sep+basename(urlsplit(image_url)[2])
-
-        try:
-            with open(file_name,"wb") as picture:
-                picture.write(image)
-        
-        except IOError:
-            print("IO Error\n")
-            continue
-        finally:
-            picture.close()
-        
-        print("下载{pic_name}完成！".format(pic_name=file_name))
-
 def get_image_url(qid,headers,path):
     tmp_url="https://www.zhihu.com/node/QuestionAnswerListV2"
     size=10
@@ -163,16 +140,15 @@ def read_image_url_from_file(file_name):
     return image_url_list,answer_id_list
 
 def main_download():
-    title=input('title(命名用):\n')
-    question_id=input(
-        'question_id(知乎问题网址 https://www.zhihu.com/question/********/answer/######## 中的 ********) : \n)')
-    
+
     title = '拥有一副令人羡慕的好身材是怎样的体验？'
     question_id = 297715922
-    path=os.path.dirname(os.path.abspath(__file__))+\
+    #path=os.path.dirname(os.path.abspath(__file__))+\
+    #   '\\'+str(question_id)+'_'+title
+    path="D:\迅雷下载"+\
         '\\'+str(question_id)+'_'+title
     mkdir(path)
-
+    
     img_list,answer_list=read_image_url_from_file(path)
     if not len(img_list):
         img_list,answer_list=get_image_url(question_id,headers,path)
