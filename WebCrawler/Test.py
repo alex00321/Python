@@ -25,23 +25,24 @@ def mkdir(path):
         print(u"图片存放于：",os.getcwd()+os.sep+path)
         return False
 
-def download_pic2(img_lists,dir_name):
+def download_pic2(img_lists,answer_list,dir_name):
     print("一共有{num}张照片".format(num=len(img_lists)))
 
     index=1
-
-    for img_url in img_lists:
-        file_name=dir_name+os.sep.basename(urlsplit(img_url)[2])
-
+    for i in range(len(img_lists)):
+        image_url=img_lists[i]
+        answer_id=answer_list[i]
+        file_name=dir_name+os.sep+answer_id+\
+            '_'+basename(urlsplit(image_url)[2])
         if os.path.exists(file_name):
             print("文件{file_name}已存在。".format(file_name=file_name))
             index +=1
             continue
         
         retry_time=3
-        auto_download(img_url,file_name,retry_time)
+        auto_download(image_url,file_name,retry_time)
+        print("下载{pic_name}完成！({index}/{sum})".format(pic_name=image_url,index=index,sum=len(img_lists)))
 
-        print("下载{pic_name}完成！({index}/{sum})".format(pic_name=file_name,index=index,sum=len(img_lists)))
         index +=1
     
     if len(failed_image_list):
@@ -51,7 +52,7 @@ def download_pic2(img_lists,dir_name):
     
     print('\n图片已保存至',dir_name+'\\')
     os.system("pause")
-
+    
 def auto_download(image_url,file_name,retry_time):
     try:
         if retry_time<=0:
@@ -64,6 +65,7 @@ def auto_download(image_url,file_name,retry_time):
         print("文件下载不完整，尝试重新下载，剩余尝试次数{retry_time}".format(retry_time=retry_time))
         retry_time-=1
         auto_download(image_url,file_name,retry_time)
+
     except urllib.request.URLError as e:
         print("网络连接出错，尝试重新下载，剩余尝试次数{retry_time}".format(retry_time=retry_time))
         retry_time-=1
@@ -113,9 +115,10 @@ def get_image_url(qid,headers,path):
             print("图片URL获取完毕，页数：",(offset-size)/size)
             return image_urls,answer_ids
         
-        imgreg=re.compile('data-original="(.*？)"',re.S)
+        imgreg = re.compile('data-original="(.*?)"', re.S)
 
-        answerreg=re.compile('data-entry-url="\\\\/question\\\\/{question_id}\\\\/answer\\\\/(.*？)"'.format(question_id=qid),re.S)
+        answerreg = re.compile(
+            'data-entry-url="\\\\/question\\\\/{question_id}\\\\/answer\\\\/(.*?)"'.format(question_id=qid), re.S)
 
         for answer in answers:
             tmp_list=[]
@@ -128,7 +131,7 @@ def get_image_url(qid,headers,path):
             tmp_list=list(set(tmp_list))
 
             for item in tmp_list:
-                if item.endwith('r.jpg'):
+                if item.endswith('r.jpg'):
                     print(item)
                     write_image_url_to_file(path,[item,answer_id])
                     image_urls.append(item)
