@@ -141,8 +141,8 @@ def read_image_url_from_file(file_name):
 
 def main_download():
 
-    title = '拥有一副令人羡慕的好身材是怎样的体验？'
-    question_id = 297715922
+    title = '女孩子胸大是什么体验？'
+    question_id = 291678281
     #path=os.path.dirname(os.path.abspath(__file__))+\
     #   '\\'+str(question_id)+'_'+title
     path="D:\迅雷下载"+\
