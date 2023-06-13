@@ -1,4 +1,4 @@
-import time, sys, queue
+import time, queue
 from multiprocessing.managers import BaseManager
 
 # Inherited from base manager

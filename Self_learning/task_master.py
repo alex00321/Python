@@ -1,4 +1,6 @@
-import random, time, queue
+# the explaination lays here: https://blog.csdn.net/licheetools/article/details/82946312
+# In order to run it, you need to open two cmd windows and one is using "Python task_manager.py", the other is using "python task_worker.py"
+import random, queue
 from multiprocessing.managers import BaseManager
 from multiprocessing import freeze_support
 
