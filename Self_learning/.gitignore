@@ -1,0 +1,5 @@
+
+#remove txt file
+*.txt
+build
+dist
